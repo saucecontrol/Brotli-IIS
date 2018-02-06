@@ -7,7 +7,7 @@ Brotli offers significantly [better compression than gzip](https://samsaffron.co
 
 This IIS Compression Scheme plugin is free and open source, in keeping with the philosophy of Brotli itself.
 
-This plugin is a very thin wrapper around Google's Brotli encoding library.  There is no license management code, no automagic configuration, no unnecessary procecessing.  This plugin contains only what is absolutely necessary to cleanly integrate Google's Brotli encoder with IIS's built-in Static and Dynamic Compression Modules.
+This plugin is a very thin wrapper around Google's Brotli encoding library.  There is no license management code, no automagic configuration, no unnecessary processing.  This plugin contains only what is absolutely necessary to cleanly integrate Google's Brotli encoder with IIS's built-in Static and Dynamic Compression Modules.
 
 Of course, that means you have to configure it yourself.  But a proper HTTP compression design requires that you know what you're doing anyway, so this should not be a problem.  If you're new to this, you may find the following links useful for learning about IIS compression and the configuration thereof.
 
@@ -28,7 +28,7 @@ Features
 Requirements
 ------------
 
-IIS 7.5 or later (Windows 7/Windows Server 2008 R2), x64 only. You must have admin permissions to modify the root applicationHost.config file.
+IIS 7.5 or later (Windows 7/Windows Server 2008 R2), x64 only. You must have admin permissions to modify the root `applicationHost.config` file.
 
 Installation
 ------------
@@ -96,4 +96,9 @@ You'll need to enable rewrite of the `Accept-Encoding` header and then configure
 </rewrite>
 ```
 
-This rule simply looks for the string `br` (surrounded by word boundaries) in the `Accept-Encoding` header and re-writes it to be just `br`, removing the choice of others.  With only one choice of valid `Response-Encoding`, the IIS Compression Modules will be forced to select Brotli.  This allows you to leave `gzip` and/or `deflate` enabled for clients that do no advertise `br` support.
+This rule simply looks for the string `br` (surrounded by word boundaries) in the `Accept-Encoding` header and re-writes it to be just `br`, removing the choice of others.  With only one choice of valid `Response-Encoding`, the IIS Compression Modules will be forced to select Brotli.  This allows you to leave `gzip` and/or `deflate` enabled for clients that do not advertise `br` support.
+
+License
+-------
+
+Like [Google's Brotli](https://github.com/google/brotli) software, this Brotli IIS Compression Scheme Plugin is licensed under the [MIT License](https://opensource.org/licenses/MIT).  It is free for all uses, including commercial.
