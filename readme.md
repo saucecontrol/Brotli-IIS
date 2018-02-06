@@ -11,13 +11,13 @@ This plugin is a very thin wrapper around Google's Brotli encoding library.  The
 
 Of course, that means you have to configure it yourself.  But a proper HTTP compression design requires that you know what you're doing anyway, so this should not be a problem.  If you're new to this, you may find the following links useful for learning about IIS compression and the configuration thereof.
 
-[Configuring HTTP Compression in IIS 7](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771003(v%3dws.10))
-[IIS 7 Compression. Good? Bad? How much?](https://weblogs.asp.net/owscott/iis-7-compression-good-bad-how-much)
-[Changes to compression in IIS7](http://www.ksingla.net/2006/06/changes_to_compression_in_iis7/)
-[Built-in GZip/Deflate Compression on IIS 7.x](https://weblog.west-wind.com/posts/2011/May/05/Builtin-GZipDeflate-Compression-on-IIS-7x)
+* [Configuring HTTP Compression in IIS 7](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771003(v%3dws.10))
+* [IIS 7 Compression. Good? Bad? How much?](https://weblogs.asp.net/owscott/iis-7-compression-good-bad-how-much)
+* [Changes to compression in IIS7](http://www.ksingla.net/2006/06/changes_to_compression_in_iis7/)
+* [Built-in GZip/Deflate Compression on IIS 7.x](https://weblog.west-wind.com/posts/2011/May/05/Builtin-GZipDeflate-Compression-on-IIS-7x)
 
 Very little has changed since IIS 7 was released, but here's one more article highlighting some improvements to dynamic compression in IIS 10
-[IIS Dynamic Compression and new Dynamic Compression features in IIS 10](https://blogs.msdn.microsoft.com/friis/2017/09/05/iis-dynamic-compression-and-new-dynamic-compression-features-in-iis-10/)
+* [IIS Dynamic Compression and new Dynamic Compression features in IIS 10](https://blogs.msdn.microsoft.com/friis/2017/09/05/iis-dynamic-compression-and-new-dynamic-compression-features-in-iis-10/)
 
 Features
 --------
