@@ -1,0 +1,13 @@
+.vs
+obj
+x64
+configuration
+
+*.suo
+*.obj
+*.aps
+*.pch
+*.ncb
+*.sdf
+*.user
+*.cachefile
