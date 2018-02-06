@@ -65,7 +65,7 @@ There are however, some gotchas related to the way the browser support is implem
 
 ### HTTPS is Required
 
-Current browsers will only request and accept Brotli encoding over HTTPS.  Due to some poorly-behaved intermediate software/devices (proxies, caches, etc) in the wild, the [Chrome team decided](https://bugs.chromium.org/p/chromium/issues/detail?id=452335#c87) to only advertise Brotli support over HTTPS to make sure these poorly-behaved intermediate software and devices couldn't interfere with Brotli-encoded responses.  Other vendors followed suit.
+Current browsers will only request and accept Brotli encoding over HTTPS.  Due to some poorly-behaved intermediate software/devices (proxies, caches, etc) in the wild, the [Chrome team decided](https://bugs.chromium.org/p/chromium/issues/detail?id=452335#c87) to only advertise Brotli support over HTTPS to make sure these poorly-behaved intermediate software and devices wouldn't mangle Brotli-encoded responses.  Other vendors followed suit.
 
 If you aren't using HTTPS, you can't use Brotli.  Thankfully, with [Let's Encrypt](https://github.com/Lone-Coder/letsencrypt-win-simple), HTTPS is now free and easy to set up.  Just do it.
 
@@ -82,15 +82,17 @@ You'll need to enable rewrite of the `Accept-Encoding` header and then configure
     <allowedServerVariables>
         <add name="HTTP_ACCEPT_ENCODING" />
     </allowedServerVariables>
-    <rule name="Prioritize Brotli">
-        <match url=".*" />
-        <conditions>
-            <add input="{HTTP_ACCEPT_ENCODING}" pattern="\bbr\b" />
-        </conditions>
-        <serverVariables>
-            <set name="HTTP_ACCEPT_ENCODING" value="br" />
-        </serverVariables>
-    </rule>
+    <rules>
+        <rule name="Prioritize Brotli">
+            <match url=".*" />
+            <conditions>
+                <add input="{HTTP_ACCEPT_ENCODING}" pattern="\bbr\b" />
+            </conditions>
+            <serverVariables>
+                <set name="HTTP_ACCEPT_ENCODING" value="br" />
+            </serverVariables>
+        </rule>
+    </rules>
 </rewrite>
 ```
 
