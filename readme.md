@@ -5,7 +5,7 @@ Brotli is a [new-ish](https://opensource.googleblog.com/2015/09/introducing-brot
 
 Brotli offers significantly [better compression than gzip](https://samsaffron.com/archive/2016/06/15/the-current-state-of-brotli-compression) with very little additional compression cost and almost no additional decompression cost.
 
-This plugin is a very thin wrapper around Google's Brotli encoding library.  There is no license management code, no automagic configuration, no unnecessary processing.  This plugin contains only what is absolutely necessary to cleanly integrate Google's Brotli encoder with IIS's built-in Static and Dynamic Compression Modules.
+This plugin is a very thin wrapper around Google's Brotli encoding library.  There is no license management code, no automagic configuration, no unnecessary processing.  This plugin contains only what is absolutely necessary to cleanly and reliably integrate Google's Brotli encoder with IIS's built-in Static and Dynamic Compression Modules.
 
 Of course, that means you have to configure it yourself.  But a proper HTTP compression design requires that you know what you're doing anyway, so this should not be a problem.  If you're new to this, you may find the following links useful for learning about IIS compression and the configuration thereof.
 
@@ -26,14 +26,14 @@ Features
 Requirements
 ------------
 
-IIS 7.5 or later (Windows 7/Windows Server 2008 R2), x64 only. You must have admin permissions to modify the root `applicationHost.config` file.
+IIS 7 or later (Windows Vista/Windows Server 2008). You must have admin permissions to modify the root `applicationHost.config` file.
 
 Installation
 ------------
 
-The Brotli IIS Compression Scheme Plugin is packaged as a single DLL file with no external dependencies.  The simplest way to install it is to copy it to your `inetsrv` folder, alongside the built-in `gzip.dll`.
+The Brotli IIS Compression Scheme Plugin is packaged as a single DLL file per platform architecture with no external dependencies.  The simplest way to install it is to copy it to your `inetsrv` folder, alongside the built-in `gzip.dll`.  This allows configuration for Brotli to mirror the built-in schemes and allows for easy support of both 64-bit and 32-bit Application Pools.
 
-Binaries for x64 Windows are available on the [releases page](https://github.com/saucecontrol/BrotliIIS/releases).
+Binaries are available on the [releases page](https://github.com/saucecontrol/BrotliIIS/releases).
 
 The Compression Scheme must be registered in the `applicationHost.config` file.  You can do this manually or with AppCmd.exe or IIS Manager.  Final configuration will look something like this:
 
@@ -52,7 +52,9 @@ The Compression Scheme must be registered in the `applicationHost.config` file. 
 </httpCompression>
 ```
 
-Note: The name `br` shown above is important.  This name must match the `Accept-Encoding` header value sent by the client and will be returned to the client in the `Content-Encoding` header.  `br` is the official designator for Brotli.
+Note that the name `br` shown above is important.  This name must match the `Accept-Encoding` header value sent by the client and will be returned to the client in the `Content-Encoding` header.  `br` is the official designator for Brotli.
+
+Note also that if you need to support 32-bit Application Pools on 64-bit IIS, you will need to deploy the x64 version of the DLL to `%windir%\system32\inetsrv` and the x86 DLL to `%windir%\syswow64\inetsrv`.  The WoW64 subsystem will automatically load the correct platform version of the DLL if its path is listed under `system32` in the `applicationHost.config`, just as it does with `gzip.dll`.
 
 Configuration
 -------------
@@ -61,7 +63,7 @@ The only configuration accepted by the plugin is the compression level (or 'qual
 
 Brotli accepts quality values from `0` to `11`. Configured values outside that range will cause the compression DLL to raise an error during processing.
 
-Be aware that the default values for compression level in IIS are `0` for dynamic content and `7` for static content.  These values are based on the `0` to `9` scale used by `gzip` and `deflate` and aren't normally ideal settings anyway.  The values above represent a good starting point for most modern servers.
+Be aware that the default values for compression level in IIS are `0` for dynamic content and `7` for static content.  These values are based on the `0` to `9` scale used by `gzip` and `deflate` and aren't normally ideal settings anyway.  The values in the sample above represent a good starting point for most modern servers.
 
 Browser Support
 ---------------
@@ -72,17 +74,17 @@ There are however, some gotchas related to the way the browser support is implem
 
 ### HTTPS is Required
 
-Current browsers will only request and accept Brotli encoding over HTTPS.  Due to some poorly-behaved intermediate software/devices (proxies, caches, etc) in the wild, the Chrome dev team [decided](https://bugs.chromium.org/p/chromium/issues/detail?id=452335#c87) to only advertise Brotli support over HTTPS so that these poorly-behaved intermediate software/devices couldn't mangle Brotli-encoded responses.  Other vendors followed suit.
+Current browsers will only request and accept Brotli encoding over HTTPS.  Due to some poorly-behaved intermediate software/devices (proxies, caches, etc) in the wild, the Chrome dev team [decided](https://bugs.chromium.org/p/chromium/issues/detail?id=452335#c87) to only advertise Brotli support over HTTPS so that these poorly-behaved intermediaries couldn't mangle Brotli-encoded responses.  Other vendors followed suit.
 
 If you aren't using HTTPS, you can't use Brotli.  Thankfully, with [Let's Encrypt](https://github.com/Lone-Coder/letsencrypt-win-simple), HTTPS is now free and easy to set up.  Just do it.
 
-### Brotli is Low-Priority (Maybe)
+### Brotli is Low-Priority (Sort of)
 
 Current browsers advertise Brotli support after `gzip` and `deflate` in the `Accept-Encoding` header.  Typical headers will look like: `Accept-Encoding: gzip, deflate, br`.  This is probably also for reasons related to existing poorly-behaved Internet software.
 
 The [HTTP RFC](https://tools.ietf.org/html/rfc7231#section-5.3.4) gives no specific guidance on how to choose from many `Accept-Encoding` values with the same priority, so it would be acceptable to return `br` content to those clients, but IIS will choose the first one (left to right) that matches one of its configured compression schemes. This means it won't choose `br` if either `gzip` or `deflate` compression is also enabled.
 
-One obvious solution is to disable `gzip` and `deflate` on your server so that `br` is the only match.  However, because roughly 20-25% of Internet users (as of early 2018) are still using older web browsers that don't support Brotli, it may be desirable to keep `gzip` enabled on your server to support compression for those clients, at least for a while longer.
+One obvious solution is to disable `gzip` and `deflate` on your server so that `br` is the only match.  However, because roughly 20% of Internet users (as of early 2018) are still using older web browsers that don't support Brotli, you will probably want to keep `gzip` enabled on your server to support compression for those clients, at least for a while longer.
 
 If you wish to leave both (or all three) schemes enabled, you must, therefore, take some action to force IIS to choose `br` when acceptable.  To accomplish this, you can modify the `Accept-Encoding` header value on requests as they enter your IIS pipeline.  The [IIS URL Rewrite Module](https://www.iis.net/downloads/microsoft/url-rewrite) makes this easy.
 
