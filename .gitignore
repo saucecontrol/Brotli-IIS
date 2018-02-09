@@ -1,7 +1,9 @@
 .vs
-obj
 x64
+x86
 configuration
+Debug
+Release
 
 *.suo
 *.obj
