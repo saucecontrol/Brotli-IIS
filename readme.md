@@ -1,3 +1,5 @@
+[![Latest Release](https://img.shields.io/github/release/saucecontrol/brotliIIS.svg?label=Latest%20Release)](https://github.com/saucecontrol/BrotliIIS/releases)
+
 Brotli IIS Compression Scheme Plugin
 ====================================
 
@@ -52,7 +54,7 @@ The Compression Scheme must be registered in the `applicationHost.config` file. 
 </httpCompression>
 ```
 
-Note that the name `br` shown above is important.  This name must match the `Accept-Encoding` header value sent by the client and will be returned to the client in the `Content-Encoding` header.  `br` is the official designator for Brotli.
+Note that the name `br` shown above is important.  This name must match the `Accept-Encoding` header value sent by the client and will be returned to the client in the `Content-Encoding` header.  `br` is the [official](https://www.iana.org/assignments/http-parameters/http-parameters.xhtml#content-coding) designator for Brotli.
 
 Note also that if you need to support 32-bit Application Pools on 64-bit IIS, you will need to deploy the x64 version of the DLL to `%windir%\system32\inetsrv` and the x86 DLL to `%windir%\syswow64\inetsrv`.  The WoW64 subsystem will automatically load the correct platform version of the DLL if its path is listed under `system32` in the `applicationHost.config`, just as it does with `gzip.dll`.
 
@@ -82,13 +84,13 @@ If you aren't using HTTPS, you can't use Brotli.  Thankfully, with [Let's Encryp
 
 Current browsers advertise Brotli support after `gzip` and `deflate` in the `Accept-Encoding` header.  Typical headers will look like: `Accept-Encoding: gzip, deflate, br`.  This is probably also for reasons related to existing poorly-behaved Internet software.
 
-The [HTTP RFC](https://tools.ietf.org/html/rfc7231#section-5.3.4) gives no specific guidance on how to choose from many `Accept-Encoding` values with the same priority, so it would be acceptable to return `br` content to those clients, but IIS will choose the first one (left to right) that matches one of its configured compression schemes. This means it won't choose `br` if either `gzip` or `deflate` compression is also enabled.
+The [HTTP RFC](https://tools.ietf.org/html/rfc7231#section-5.3.4) gives no specific guidance on how to choose from many `Accept-Encoding` values with the same priority, so it would be acceptable to return `br` content to those clients, but newer versions of IIS choose the first one (left to right) that matches one of the configured compression schemes. This means they won't choose `br` if either `gzip` or `deflate` compression is also enabled.
 
 One obvious solution is to disable `gzip` and `deflate` on your server so that `br` is the only match.  However, because roughly 20% of Internet users (as of early 2018) are still using older web browsers that don't support Brotli, you will probably want to keep `gzip` enabled on your server to support compression for those clients, at least for a while longer.
 
 If you wish to leave both (or all three) schemes enabled, you must, therefore, take some action to force IIS to choose `br` when acceptable.  To accomplish this, you can modify the `Accept-Encoding` header value on requests as they enter your IIS pipeline.  The [IIS URL Rewrite Module](https://www.iis.net/downloads/microsoft/url-rewrite) makes this easy.
 
-The `Accept-Encoding` header is represented by the `HTTP_ACCEPT_ENCODING` Server Variable in the IIS pipeline, and we can modify it before it reaches the Compression Module(s).  Here is a sample configuration:
+The `Accept-Encoding` header is represented by the `HTTP_ACCEPT_ENCODING` Server Variable in the IIS pipeline, and you can modify it before it reaches the Compression Module(s).  Here is a sample configuration:
 
 ```
 <rewrite>
