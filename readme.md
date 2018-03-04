@@ -1,9 +1,10 @@
-[![Latest Release](https://img.shields.io/github/release/saucecontrol/brotliIIS.svg?label=Latest%20Release)](https://github.com/saucecontrol/BrotliIIS/releases)
+<p align="center"><a href="https://github.com/saucecontrol/BrotliIIS/releases"><img src="https://brotli.org/brotli.svg" alt="Brotli" width="64"></a></p>
+<p align="center"><a href="https://github.com/saucecontrol/BrotliIIS/releases"><img src="https://img.shields.io/github/release/saucecontrol/BrotliIIS.svg?style=flat-square&colorB=eeaa33&label=Latest%20Version" alt="Latest Release"></a></p>
 
 Brotli IIS Compression Scheme Plugin
 ====================================
 
-Brotli is a [new-ish](https://opensource.googleblog.com/2015/09/introducing-brotli-new-compression.html) open-sourced compression algorithm specifically designed for HTTP content encoding.  The algorithm and reference encoder/decoder libraries were [created by Google](https://github.com/google/brotli) and offered to the world for free.
+Brotli is a [new-ish](https://opensource.googleblog.com/2015/09/introducing-brotli-new-compression.html) open-sourced compression algorithm specifically designed for HTTP content encoding.  The algorithm and reference encoder/decoder libraries were [created by Google](https://github.com/google/brotli).
 
 Brotli offers significantly [better compression than gzip](https://samsaffron.com/archive/2016/06/15/the-current-state-of-brotli-compression) with very little additional compression cost and almost no additional decompression cost.
 
@@ -13,17 +14,17 @@ Of course, that means you have to configure it yourself.  But a proper HTTP comp
 
 * [Built-in GZip/Deflate Compression on IIS 7.x](https://weblog.west-wind.com/posts/2011/May/05/Builtin-GZipDeflate-Compression-on-IIS-7x)
 * [IIS 7 Compression. Good? Bad? How much?](https://weblogs.asp.net/owscott/iis-7-compression-good-bad-how-much)
-* [Configuring HTTP Compression in IIS 7](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc771003(v%3dws.10))
 * [Changes to compression in IIS7](http://www.ksingla.net/2006/06/changes_to_compression_in_iis7/)
 
 Very little has changed since IIS 7 was released, but here's one more article highlighting some improvements to dynamic compression and compression config in IIS 10
+
 * [IIS Dynamic Compression and new Dynamic Compression features in IIS 10](https://blogs.msdn.microsoft.com/friis/2017/09/05/iis-dynamic-compression-and-new-dynamic-compression-features-in-iis-10/)
 
 Features
 --------
 
 * Integrates with the built-in IIS Static and Dynamic Compression Modules.
-* Uses the latest version of Google's Brotli encoder (v1.0.2).
+* Uses the latest version of Google's Brotli encoder (v1.0.3).
 
 Requirements
 ------------
@@ -33,16 +34,16 @@ IIS 7 or later (Windows Vista/Windows Server 2008). You must have admin permissi
 Installation
 ------------
 
-The Brotli IIS Compression Scheme Plugin is packaged as a single DLL file per platform architecture with no external dependencies.  The simplest way to install it is to copy it to your `inetsrv` folder, alongside the built-in `gzip.dll`.  This allows configuration for Brotli to mirror the built-in schemes and allows for easy support of both 64-bit and 32-bit Application Pools.
+The Brotli IIS Compression Scheme Plugin is packaged as a single DLL file per platform architecture, with no external dependencies.  The simplest way to install it is to copy it to your `inetsrv` folder, alongside the built-in `gzip.dll`.  This allows configuration for Brotli to mirror the built-in schemes and allows for easy support of both 64-bit and 32-bit Application Pools.
 
-Binaries are available on the [releases page](https://github.com/saucecontrol/BrotliIIS/releases).
+Binaries are available on the [releases page](https://github.com/saucecontrol/BrotliIIS/releases).  A sample installation script is included in the .zip file.
 
-The Compression Scheme must be registered in the `applicationHost.config` file.  You can do this manually or with AppCmd.exe or IIS Manager.  Final configuration will look something like this:
+The Compression Scheme must be registered in the `applicationHost.config` file.  You can do this manually or with appcmd.exe or IIS Manager.  Final configuration will look something like this:
 
 ```
 <httpCompression directory="%SystemDrive%\inetpub\temp\IIS Temporary Compressed Files">
-    <scheme name="br" dll="%Windir%\system32\inetsrv\brotli.dll" dynamicCompressionLevel="5" staticCompressionLevel="11" />
-    <scheme name="gzip" dll="%Windir%\system32\inetsrv\gzip.dll" dynamicCompressionLevel="4" staticCompressionLevel="9" />
+    <scheme name="br" dll="%windir%\system32\inetsrv\brotli.dll" dynamicCompressionLevel="5" staticCompressionLevel="11" />
+    <scheme name="gzip" dll="%windir%\system32\inetsrv\gzip.dll" dynamicCompressionLevel="4" staticCompressionLevel="9" />
     <staticTypes>
         <add mimeType="text/*" enabled="true" />
          ...
