@@ -1,5 +1,5 @@
-<p align="center"><a href="https://github.com/saucecontrol/BrotliIIS/releases"><img src="https://brotli.org/brotli.svg" alt="Brotli" width="64"></a></p>
-<p align="center"><a href="https://github.com/saucecontrol/BrotliIIS/releases"><img src="https://img.shields.io/github/release/saucecontrol/BrotliIIS.svg?style=flat-square&colorB=eeaa33&label=Latest%20Version" alt="Latest Release"></a></p>
+<p align="center"><a href="https://github.com/saucecontrol/Brotli-IIS/releases"><img src="https://brotli.org/brotli.svg" alt="Brotli" width="64"></a></p>
+<p align="center"><a href="https://github.com/saucecontrol/Brotli-IIS/releases"><img src="https://img.shields.io/github/release/saucecontrol/Brotli-IIS.svg?style=flat-square&colorB=eeaa33&label=Latest%20Version" alt="Latest Release"></a> <a href="https://github.com/saucecontrol/Brotli-IIS/releases"><img src="https://img.shields.io/github/downloads/saucecontrol/Brotli-IIS/total.svg?style=flat-square&colorB=eeaa33&label=Downloads" alt="Downloads"></a></p>
 
 Brotli IIS Compression Scheme Plugin
 ====================================
@@ -24,7 +24,7 @@ Features
 --------
 
 * Integrates with the built-in IIS Static and Dynamic Compression Modules.
-* Uses the latest version of Google's Brotli encoder (v1.0.4).
+* Uses the latest version of Google's Brotli encoder (v1.0.5).
 
 Requirements
 ------------
@@ -87,7 +87,7 @@ Current browsers advertise Brotli support after `gzip` and `deflate` in the `Acc
 
 The [HTTP RFC](https://tools.ietf.org/html/rfc7231#section-5.3.4) gives no specific guidance on how to choose from many `Accept-Encoding` values with the same priority, so it would be acceptable to return `br` content to those clients, but newer versions of IIS choose the first one (left to right) that matches one of the configured compression schemes. This means they won't choose `br` if either `gzip` or `deflate` compression is also enabled.
 
-One obvious solution is to disable `gzip` and `deflate` on your server so that `br` is the only match.  However, because roughly 20% of Internet users (as of early 2018) are still using older web browsers that don't support Brotli, you will probably want to keep `gzip` enabled on your server to support compression for those clients, at least for a while longer.
+One obvious solution is to disable `gzip` and `deflate` on your server so that `br` is the only match.  However, because roughly 15% of Internet users (as of mid-2018) are still using older web browsers that don't support Brotli, you will probably want to keep `gzip` enabled on your server to support compression for those clients, at least for a while longer.
 
 If you wish to leave both (or all three) schemes enabled, you must, therefore, take some action to force IIS to choose `br` when acceptable.  To accomplish this, you can modify the `Accept-Encoding` header value on requests as they enter your IIS pipeline.  The [IIS URL Rewrite Module](https://www.iis.net/downloads/microsoft/url-rewrite) makes this easy.
 
