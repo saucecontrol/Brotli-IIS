@@ -1,6 +1,9 @@
 <p align="center"><a href="https://github.com/saucecontrol/Brotli-IIS/releases"><img src="https://brotli.org/brotli.svg" alt="Brotli" width="64"></a></p>
 <p align="center"><a href="https://github.com/saucecontrol/Brotli-IIS/releases"><img src="https://img.shields.io/github/release/saucecontrol/Brotli-IIS.svg?style=flat-square&colorB=eeaa33&label=Latest%20Version" alt="Latest Release"></a> <a href="https://github.com/saucecontrol/Brotli-IIS/releases"><img src="https://img.shields.io/github/downloads/saucecontrol/Brotli-IIS/total.svg?style=flat-square&colorB=eeaa33&label=Downloads" alt="Downloads"></a></p>
 
+---
+**Note**: After this project was created, Microsoft [released their own](https://docs.microsoft.com/en-us/iis/extensions/iis-compression/iis-compression-overview) new compression plugin for Brotli and even [borrowed my workaround](https://docs.microsoft.com/en-us/iis/extensions/iis-compression/using-iis-compression#before-iis-100-version-1803) for `Accept-Encoding` priority.  You may wish to use that plugin instead.  However, this project uses a [modified version](https://github.com/google/brotli/pull/636) of the Brotli encoder which makes it 5-15% faster than the version Microsoft is using.  I will continue to maintain this project at least until the PR for that modification is accepted in the Goole repo and it flows into a release version of the Microsoft plugin.
+
 Brotli IIS Compression Scheme Plugin
 ====================================
 
@@ -71,7 +74,7 @@ Be aware that the default values for compression level in IIS are `0` for dynami
 Browser Support
 ---------------
 
-As of the end of 2017, Brotli is supported in [all modern browsers](https://caniuse.com/#feat=brotli).
+Since the end of 2017, Brotli has been supported in [all modern browsers](https://caniuse.com/#feat=brotli).
 
 There are however, some gotchas related to the way the browser support is implemented.
 
@@ -83,13 +86,16 @@ If you aren't using HTTPS, you can't use Brotli.  Thankfully, with [Let's Encryp
 
 ### Brotli is Low-Priority (Sort of)
 
-Current browsers advertise Brotli support after `gzip` and `deflate` in the `Accept-Encoding` header.  Typical headers will look like: `Accept-Encoding: gzip, deflate, br`.  This is probably also for reasons related to existing poorly-behaved Internet software.
+Current browsers advertise Brotli support *after* `gzip` and `deflate` in the `Accept-Encoding` header.  Typical headers will look like: `Accept-Encoding: gzip, deflate, br`.  This is probably also for reasons related to existing poorly-behaved Internet software.
 
-The [HTTP RFC](https://tools.ietf.org/html/rfc7231#section-5.3.4) gives no specific guidance on how to choose from many `Accept-Encoding` values with the same priority, so it would be acceptable to return `br` content to those clients, but newer versions of IIS choose the first one (left to right) that matches one of the configured compression schemes. This means they won't choose `br` if either `gzip` or `deflate` compression is also enabled.
+The [HTTP RFC](https://tools.ietf.org/html/rfc7231#section-5.3.4) gives no specific guidance on how to choose from many `Accept-Encoding` values with the same priority, so it would be acceptable to return `br` content to those clients, but some versions of IIS choose the first one (left to right) that matches one of the configured compression schemes. This means they won't choose `br` if either `gzip` or `deflate` compression is also enabled.
 
-One obvious solution is to disable `gzip` and `deflate` on your server so that `br` is the only match.  However, because roughly 15% of Internet users (as of mid-2018) are still using older web browsers that don't support Brotli, you will probably want to keep `gzip` enabled on your server to support compression for those clients, at least for a while longer.
+This issue has been resolved IIS 10 version 1803 and newer.  On those versions, the priority for response encoding is set by the order of the `scheme` elements under `httpCompression`.  If you list `br` before `gzip`, it will be given priority regardless of the order in the request header.
 
-If you wish to leave both (or all three) schemes enabled, you must, therefore, take some action to force IIS to choose `br` when acceptable.  To accomplish this, you can modify the `Accept-Encoding` header value on requests as they enter your IIS pipeline.  The [IIS URL Rewrite Module](https://www.iis.net/downloads/microsoft/url-rewrite) makes this easy.
+On older versions of IIS, you have two options:
+
+1) Disable `gzip` and `deflate` on your server so that `br` is the only possible match.  As of late 2019, Brotli is supported by over 92% of browsers worldwide, and that number continues to climb.  Older clients would continue to work with uncompressed responses.
+2) Take some action to force IIS to choose `br` when acceptable.  To accomplish this, you can modify the `Accept-Encoding` header value on requests as they enter your IIS pipeline.  The [IIS URL Rewrite Module](https://www.iis.net/downloads/microsoft/url-rewrite) makes this easy.
 
 The `Accept-Encoding` header is represented by the `HTTP_ACCEPT_ENCODING` Server Variable in the IIS pipeline, and you can modify it before it reaches the Compression Module(s).  Here is a sample configuration:
 
@@ -115,6 +121,8 @@ The `Accept-Encoding` header is represented by the `HTTP_ACCEPT_ENCODING` Server
 The rule above simply looks for the string `br` (surrounded by word boundaries and not immediately followed by `;q=0`) in the `Accept-Encoding` header and re-writes it to be just plain `br`, giving IIS only one choice.
 
 Note that the default URL Rewrite configuration does not allow modification of the `HTTP_ACCEPT_ENCODING` variable.  The `allowedServerVariables` element overrides that restriction and must be configured in `applicationHost.config`.  The rewrite rule can then be defined at any level in the config hierarchy, although it probably makes sense to make it global.
+
+Note also that URL Rewrite makes requests ineligible for caching in the HTTP.sys kernel-mode cache.  If you wish to take full advantage of kernel-mode caching while using Brotli on older IIS versions, you will need to use option 1) above.
 
 Testing
 -------
