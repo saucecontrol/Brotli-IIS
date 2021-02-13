@@ -19,13 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='Win32'">
-    <Arch>x86</Arch>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Platform)'=='x64'">
-    <Arch>x64</Arch>
-  </PropertyGroup>
-
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{281A02A7-1B14-4207-8A5C-45B829AD8611}</ProjectGuid>
@@ -63,8 +56,8 @@
     <BaseOutputPath>$(MSBuildThisFileDirectory)..\out\bin\</BaseOutputPath>
     <IntermediateOutputPath>$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
     <OutputPath>$(BaseOutputPath)$(Configuration)\</OutputPath>
-    <IntDir>$(IntermediateOutputPath)$(Arch)\</IntDir>
-    <OutDir>$(OutputPath)$(Arch)\</OutDir>
+    <IntDir>$(IntermediateOutputPath)$(PlatformShortName)\</IntDir>
+    <OutDir>$(OutputPath)$(PlatformShortName)\</OutDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
@@ -78,12 +71,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>BRIIS_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\brotli\buildfiles\$(Arch)\install\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\brotli\buildfiles\$(PlatformShortName)\install\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>..\brotli\buildfiles\$(Arch)\install\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\brotli\buildfiles\$(PlatformShortName)\install\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ModuleDefinitionFile>brotli.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>

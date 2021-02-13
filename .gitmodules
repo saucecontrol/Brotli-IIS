@@ -1,4 +1,4 @@
 [submodule "brotli"]
 	path = brotli
-	url = https://github.com/saucecontrol/brotli
+	url = https://github.com/google/brotli
 	branch = master

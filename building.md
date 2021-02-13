@@ -5,7 +5,7 @@ Initialize the submodule
 git submodule update --init
 ```
 
-The vcxproj in this project is configured to look for the headers and lib files under `brotli\buildfiles\[architecture]\install`.  I use the following `cmake` commands to build the Brotli statc lib:
+The vcxproj in this project is configured to look for the headers and lib files under `brotli\buildfiles\[architecture]\install`.  I use the following `cmake` commands to build the Brotli static lib:
 
 Create x86 VC project files
 
