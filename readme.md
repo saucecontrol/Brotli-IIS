@@ -2,7 +2,7 @@
 <p align="center"><a href="https://github.com/saucecontrol/Brotli-IIS/releases"><img src="https://img.shields.io/github/release/saucecontrol/Brotli-IIS.svg?style=flat-square&colorB=eeaa33&label=Latest%20Version" alt="Latest Release"></a> <a href="https://github.com/saucecontrol/Brotli-IIS/releases"><img src="https://img.shields.io/github/downloads/saucecontrol/Brotli-IIS/total.svg?style=flat-square&colorB=eeaa33&label=Downloads" alt="Downloads"></a></p>
 
 ---
-**Note**: After this project was created, Microsoft [released their own](https://docs.microsoft.com/en-us/iis/extensions/iis-compression/iis-compression-overview) new compression plugin for Brotli and even [borrowed my workaround](https://docs.microsoft.com/en-us/iis/extensions/iis-compression/using-iis-compression#before-iis-100-version-1803) for `Accept-Encoding` priority.  You may wish to use that plugin instead.  However, this project uses a newer version of the Brotli encoder which includes some [performance improvements](https://github.com/google/brotli/pull/636) that make it 5-15% faster than the version Microsoft is using.
+**Note**: After this project was created, Microsoft [released their own](https://docs.microsoft.com/en-us/iis/extensions/iis-compression/iis-compression-overview) new compression plugin for Brotli and even [borrowed my workaround](https://docs.microsoft.com/en-us/iis/extensions/iis-compression/using-iis-compression#before-iis-100-version-1803) for `Accept-Encoding` priority.  You may wish to use that plugin instead.
 
 Brotli IIS Compression Scheme Plugin
 ====================================
