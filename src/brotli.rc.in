@@ -23,7 +23,7 @@ BEGIN
 			VALUE "ProductVersion", "${BROTLI_VERSION_MAJOR}.${BROTLI_VERSION_MINOR}.${BROTLI_VERSION_PATCH}"
 			VALUE "OriginalFilename", "brotli.dll"
 			VALUE "LegalCopyright", "Copyright © 2018-${DATE_YEAR} Clinton Ingram"
-			VALUE "FileDescription", "Brotli Compression DLL"
+			VALUE "FileDescription", "Brotli Compression DLL${BROTLI_VERSION_PARCH}"
 			VALUE "ProductName", "Brotli IIS Compression Scheme Plugin"
 		END
 	END

@@ -27,7 +27,7 @@ Features
 --------
 
 * Integrates with the built-in IIS Static and Dynamic Compression Modules.
-* Uses the latest version of Google's Brotli encoder (v1.0.9).
+* Uses the latest version of Google's Brotli encoder (v1.1.0).
 
 Requirements
 ------------
@@ -82,7 +82,7 @@ There are however, some gotchas related to the way the browser support is implem
 
 Current browsers will only request and accept Brotli encoding over HTTPS.  Due to some poorly-behaved intermediate software/devices (proxies, caches, etc) in the wild, the Chrome dev team [decided](https://bugs.chromium.org/p/chromium/issues/detail?id=452335#c87) to only advertise Brotli support over HTTPS so that these poorly-behaved intermediaries couldn't mangle Brotli-encoded responses.  Other vendors followed suit.
 
-If you aren't using HTTPS, you can't use Brotli.  Thankfully, with [Let's Encrypt](https://github.com/Lone-Coder/letsencrypt-win-simple), HTTPS is now free and easy to set up.  Just do it.
+If you aren't using HTTPS, you can't use Brotli.  Thankfully, with [Let's Encrypt](https://github.com/win-acme/win-acme), HTTPS is now free and easy to set up.  Just do it.
 
 ### Brotli is Low-Priority on Older IIS Versions
 
@@ -94,7 +94,7 @@ This issue has been resolved in IIS 10 version 1803 and newer.  On IIS 10, the p
 
 On older versions of IIS, you have two options:
 
-1) Disable `gzip` and `deflate` on your server so that `br` is the only possible match.  As of early 2021, Brotli is supported by over 95% of browsers worldwide, and that number continues to climb.  Older clients would continue to work with uncompressed responses.
+1) Disable `gzip` and `deflate` on your server so that `br` is the only possible match.  As of early 2024, Brotli is supported by nearly 99% of browsers worldwide, and that number continues to climb.  Older clients would continue to work with uncompressed responses.
 2) Take some action to force IIS to choose `br` when acceptable.  To accomplish this, you can modify the `Accept-Encoding` header value on requests as they enter your IIS pipeline.  The [IIS URL Rewrite Module](https://www.iis.net/downloads/microsoft/url-rewrite) makes this easy.
 
 The `Accept-Encoding` header is represented by the `HTTP_ACCEPT_ENCODING` Server Variable in the IIS pipeline, and you can modify it before it reaches the Compression Module(s).  Here is a sample configuration:
