@@ -1,0 +1,14 @@
+{
+  "name": "brotli-iis",
+  "version-semver": "1.1.0",
+  "description": "Brotli Compression Scheme Plugin for Microsoft IIS 7+",
+  "homepage": "https://github.com/saucecontrol/brotli-iis",
+  "license": "MIT",
+  "dependencies": [
+    "brotli",
+    {
+      "name": "vcpkg-cmake",
+      "host": true
+    }
+  ]
+}

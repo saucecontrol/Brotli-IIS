@@ -1,4 +1,4 @@
-[submodule "brotli"]
-	path = brotli
-	url = https://github.com/google/brotli
+[submodule "vcpkg"]
+	path = vcpkg
+	url = https://github.com/microsoft/vcpkg
 	branch = master
