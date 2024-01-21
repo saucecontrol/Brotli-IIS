@@ -1,0 +1,44 @@
+name: $(Year:yy)$(DayOfYear)$(Rev:r)
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - readme.md
+
+pool:
+  vmImage: windows-latest
+
+variables:
+  vcpkgNuGet: https://pkgs.dev.azure.com/saucecontrol/Brotli-IIS/_packaging/brotli-iis_vcpkg/nuget/v3/index.json
+  VCPKG_BINARY_SOURCES: clear;nuget,$(vcpkgNuGet),readwrite
+
+steps:
+- checkout: self
+  submodules: true
+  fetchDepth: 1
+  fetchTags: false
+
+- task: NuGetAuthenticate@1
+
+- script: vcpkg\bootstrap-vcpkg.bat
+  displayName: Setup
+
+- script: vcpkg\vcpkg install brotli-iis:win-arm64ec @build\vcpkg\response
+  displayName: Build arm64EC
+
+- script: vcpkg\vcpkg install brotli-iis:win-x64 @build\vcpkg\response
+  displayName: Build x64
+
+- script: vcpkg\vcpkg install brotli-iis:win-x86 @build\vcpkg\response
+  displayName: Build x86
+
+- publish: out/vcpkg/buildtrees
+  displayName: Publish Build Logs
+  artifact: logs.$(System.JobIdentifier)
+  condition: failed()
+
+- publish: out/vcpkg/install
+  displayName: Publish Native Binaries
+  artifact: $(System.JobIdentifier)
