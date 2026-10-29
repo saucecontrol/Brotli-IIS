@@ -1,6 +1,6 @@
 {
   "name": "brotli-iis",
-  "version-semver": "1.1.0",
+  "version-semver": "1.2.1",
   "description": "Brotli Compression Scheme Plugin for Microsoft IIS 7+",
   "homepage": "https://github.com/saucecontrol/brotli-iis",
   "license": "MIT",
