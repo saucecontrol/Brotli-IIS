@@ -27,7 +27,7 @@ Features
 --------
 
 * Integrates with the built-in IIS Static and Dynamic Compression Modules.
-* Uses the latest version of Google's Brotli encoder (v1.1.0).
+* Uses the latest version of Google's Brotli encoder (v1.2.1).
 
 Requirements
 ------------
